@@ -1,0 +1,24 @@
+#爬蟲：台灣銀行外匯網站，輸出csv file
+import urllib.request as req
+import bs4
+#import pandas as pd
+#from openpyxl import load_workbook
+
+url="https://rate.bot.com.tw/xrt?Lang=zh-TW"
+request=req.Request(url,headers={
+    "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"})
+with req.urlopen(request) as response:
+    data=response.read().decode("utf-8")
+list1=[]
+sp=bs4.BeautifulSoup(data,"html.parser")
+data_name=sp.find_all("div",class_="hidden-phone print_show")
+#幣值：現金買入賣出
+data1=sp.find_all("td","rate-content-cash text-right print_hide")
+#幣值：即期買入賣出
+data2=sp.find_all("td","rate-content-sight text-right print_hide")
+s="幣別,現金買入,現金賣出,即期買入,即期賣出\n"
+for n in range(0,len(data_name)):
+    s+="{},{},{},{},{}\n".format(data_name[n].text.strip(),data1[n*2].text,data1[n*2+1].text,data2[n*2].text,data2[n*2+1].text)
+fw=open("tr1.csv","w")
+fw.write(s)
+print(s)
