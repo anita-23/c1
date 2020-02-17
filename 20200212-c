@@ -1,3 +1,5 @@
+#從0~100，亂數產生n個整數，且每次皆不重複。輸出最大、小值及平均值(整數)
+
 #include <stdio.h>
 #include<stdlib.h>
 #include<time.h>
